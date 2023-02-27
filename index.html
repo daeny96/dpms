@@ -1,45 +1,250 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DPMS WEB</title>
-
-  <style>
-    body, div { margin: 0; padding: 0; }
-    canvas { display: block; }
-  </style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>DKS DPMS 3D WEB VIEWER</title>
+  </head>
   
-</head>
-<body>
+  <body>
+    <canvas id="c"></canvas>
+    <canvas id="c2"></canvas>
+  </body>
+  
   <script type="module">
-
-    import { three } from 'js/three.js';
-
+    import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
+    import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js';
+    import { GUI } from 'https://cdn.skypack.dev/lil-gui';
+      
+    // 센서 데이터 가져오기
+    const sensorData = getSensorData()
+ 
+    // SCENE 생성
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    const canvas = document.getElementById('c');
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    // 카메라 추가
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 50)
+    scene.add(camera);
+    
+    // 카메라 클릭 제어
+    const controls = new OrbitControls(camera, canvas);
+    controls.target.set(0, 0, 0);
+    controls.update();
 
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
+    // 센서 박스 만들기
+    sensorData.forEach(datum => {
+      const boxScale = 0.3
+      const color = 0xff0000
+      const sensor = makeSensorInstance(boxScale, color, datum.sensorPos.x, datum.sensorPos.y, datum.sensorPos.z)
+      scene.add(sensor)
+    })
 
-    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    const cube = new THREE.Mesh( geometry, material );
-    scene.add( cube );
+    // 선택된 Sensor ID 가져오기
+    let id = 4;
+    const params = getUrlParams()
+    if (params.hasOwnProperty('sensorId')) {
+      id = Number(params['sensorId']);
+    }
+    
+    // 선택된 Sensor 포커징
+    camPos(camera, sensorData[id].camPos.x, sensorData[id].camPos.y, sensorData[id].camPos.z);
+    camera.lookAt(sensorData[id].sensorPos.x, sensorData[id].sensorPos.y, sensorData[id].sensorPos.z);
+    controls.target.set(sensorData[id].sensorPos.x, sensorData[id].sensorPos.y, sensorData[id].sensorPos.z);
+    controls.update();
+    
+    // 조명 추가
+    const color = 0xFFFFFF;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(0, 20, 4);
+    scene.add(light);
 
-    camera.position.z = 5;
+    // GRID 추가
+    const size = 150;
+    const divisions = 20;
+    const gridHelper = new THREE.GridHelper(size, divisions);
+    scene.add(gridHelper);
+
+    // AXIS 좌표계 추가
+    const scene2 = new THREE.Scene();
+    const canvas2 = document.getElementById('c2');
+    const renderer2 = new THREE.WebGLRenderer({ canvas: canvas2, alpha: true });
+    renderer2.setSize(200, 200);
+    const camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const axes2 = new THREE.AxisHelper(150);
+    // camera2.up = camera.up;
+    scene2.add(axes2); 
+
+    loadGltfModel()
+
+    animate()
+
+    function getSensorData() {
+      const sensorData = [
+        {
+          id: '001',
+          sensorPos: {
+            x: 1,
+            y: 0,
+            z: 18
+          },
+          camPos: {
+            x: 10,
+            y: 10,
+            z: 10
+          }
+        },
+        {
+          id: '002',
+          sensorPos: {
+            x: 34.5,
+            y: 11.5,
+            z: 20
+          },
+          camPos: {
+            x: 43,
+            y: 17,
+            z: 30
+          }
+        },
+        {
+          id: '003',
+          sensorPos: {
+            x: 3,
+            y: -4,
+            z: 18.5
+          },
+          camPos: {
+            x: 10, 
+            y: -3,
+            z: 25
+          }
+        },
+        {
+          id: '004',
+          sensorPos: {
+            x: 19.6,
+            y: -8,
+            z: 21.5
+          },
+          camPos: {
+            x: 9.7,
+            y: 0.2,
+            z: 36
+          }
+        },
+        {
+          id: '005',
+          sensorPos: {
+            x: 36,
+            y: -9,
+            z: 21.5
+          },
+          camPos: {
+            x: 38,
+            y: -19,
+            z: 26
+          }
+        }
+      ]
+      return sensorData
+    }
+    
+    function loadGltfModel() {
+      const loader = new GLTFLoader();
+      const modelUrl = 'https://daeny96.github.io/dpms2/model/testModel2.gltf'
+      
+      loader.load(modelUrl, function (gltf) {
+        var object = gltf.scene;
+        // Set Mesh - wireFrame
+        object.traverse((node) => {
+          if (!node.isMesh) return;
+          node.material.wireframe = true;
+          node.material.transparent = true;
+          node.material.opacity = 0.2;
+
+          if (node.material.name != null && node.material.name == "") {
+            // console.log(node.material)
+          }
+        });
+        
+        scene.add(object);
+      }, undefined, function (error) {
+        console.error(error);
+      });
+    }
+
+    function camPos(cam, x, y, z) {
+      cam.position.set(x, y, z)
+    }
+
+    function makeSensorInstance(boxScale, color, x, y, z) {
+      const geometry = new THREE.BoxGeometry(boxScale, boxScale, boxScale);
+      const material = new THREE.MeshPhongMaterial({color});
+      const box = new THREE.Mesh(geometry, material);
+
+      box.position.x = x;
+      box.position.y = y;
+      box.position.z = z;
+    
+      return box;
+    }
+
+    function getUrlParams() {     
+      var params = {};  
+      
+      window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, 
+        function(str, key, value) { 
+            params[key] = value; 
+          }
+      );
+      
+      return params; 
+    }
 
     function animate() {
-      requestAnimationFrame( animate );
+      requestAnimationFrame(animate);
 
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
+      // console.log(camera.position)
 
-      renderer.render( scene, camera );
-    };
+      camera2.position.copy(camera.position);
+      camera2.position.sub(controls.target); // added by @libe
+      camera2.position.setLength(100);
+      camera2.lookAt(scene2.position);
 
-    animate();
+      renderer.render(scene, camera);
+      renderer2.render(scene2, camera2);
+    }
   </script>
-</body>
+
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    #c {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: radial-gradient(#ffffff, #353535);
+    }
+    #c2 {
+      position: absolute;
+      left: 3vw;
+      bottom: 3vw;
+      width: 200px;
+      height: 200px;
+      display: block;
+      float: left;
+      background: #ffffff;
+      border: solid 4px black;
+      border-radius: 50%;
+      z-index: 100;
+    }
+  </style>
 </html>
