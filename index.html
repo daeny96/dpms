@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="https://daeny96.github.io/dpms2/favicon2.png">
+    <link rel="shortcut icon" type="image/x-icon" href="https://daeny96.github.io/dpms2/favicon.png">
     <title>DKS DPMS 3D WEB VIEWER</title>
 </head>
 
@@ -16,6 +16,7 @@
     import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
     import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
     import { OBJLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/OBJLoader.js';
+    import { MTLLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/MTLLoader.js';
     import { OrbitControls } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js';
     import { GUI } from 'https://cdn.skypack.dev/lil-gui';
 
@@ -82,7 +83,8 @@
     // camera2.up = camera.up;
     scene2.add(axes2);
 
-    loadGltfModel()
+    loadMTLLoader();
+    // loadGltfModel()
 
     animate()
 
@@ -179,6 +181,39 @@
       }, undefined, function (error) {
         console.error(error);
       });
+    }
+
+    function loadMTLLoader() {
+      const mtlLoader = new MTLLoader();
+      const modelUrl = 'https://daeny96.github.io/dpms2/model/dpmsModel.mtl'
+
+      var url = "";
+      mtlLoader.load(url, function (materials) {
+        materials.preload();
+
+        // loadOBJLoader(materials);
+      }, function(error) {
+        alert('MTL LOADER ERROR')
+      });
+
+    }
+
+    function loadOBJLoader(materials) {
+      const objLoader = new OBJLoader();
+      const modelUrl = 'https://daeny96.github.io/dpms2/model/dpmsModel.obj'
+
+      loader.setMaterials(materials);
+
+      var url = "";
+      loader.load(url, function (object) {
+        // 모델 로드가 완료되었을때 호출되는 함수
+        object.position.x = 0;
+        object.position.y = 0;
+        object.position.z = 0;
+        scene.add(object);
+      }, function(error) {
+        alert('OBJ LOADER ERROR')
+      })
     }
 
     function camPos(cam, x, y, z) {
