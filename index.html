@@ -55,10 +55,10 @@
     }
 
     // 선택된 Sensor 포커징
-    camPos(camera, sensorData[id].camPos.x, sensorData[id].camPos.y, sensorData[id].camPos.z);
-    camera.lookAt(sensorData[id].sensorPos.x, sensorData[id].sensorPos.y, sensorData[id].sensorPos.z);
-    controls.target.set(sensorData[id].sensorPos.x, sensorData[id].sensorPos.y, sensorData[id].sensorPos.z);
-    controls.update();
+    // camPos(camera, sensorData[id].camPos.x, sensorData[id].camPos.y, sensorData[id].camPos.z);
+    // camera.lookAt(sensorData[id].sensorPos.x, sensorData[id].sensorPos.y, sensorData[id].sensorPos.z);
+    // controls.target.set(sensorData[id].sensorPos.x, sensorData[id].sensorPos.y, sensorData[id].sensorPos.z);
+    // controls.update();
 
     // 조명 추가
     const color = 0xFFFFFF;
@@ -191,8 +191,8 @@
         materials.preload();
 
         loadOBJLoader(materials);
-      }, function(error) {
-        alert('MTL LOADER ERROR')
+      }, undefined, function (error) {
+        console.error(error);
       });
 
     }
@@ -201,16 +201,16 @@
       const objLoader = new OBJLoader();
       const modelUrl = 'https://daeny96.github.io/dpms2/model/dpmsModel.obj'
 
-      loader.setMaterials(materials);
+      objLoader.setMaterials(materials);
 
-      loader.load(modelUrl, function (object) {수
+      objLoader.load(modelUrl, function (object) {
         object.position.x = 0;
         object.position.y = 0;
         object.position.z = 0;
         scene.add(object);
-      }, function(error) {
-        alert('OBJ LOADER ERROR')
-      })
+      }, undefined, function (error) {
+        console.error(error);
+      });
     }
 
     function camPos(cam, x, y, z) {
