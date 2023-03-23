@@ -187,11 +187,10 @@
       const mtlLoader = new MTLLoader();
       const modelUrl = 'https://daeny96.github.io/dpms2/model/dpmsModel.mtl'
 
-      var url = "";
-      mtlLoader.load(url, function (materials) {
+      mtlLoader.load(modelUrl, function (materials) {
         materials.preload();
 
-        // loadOBJLoader(materials);
+        loadOBJLoader(materials);
       }, function(error) {
         alert('MTL LOADER ERROR')
       });
@@ -204,9 +203,7 @@
 
       loader.setMaterials(materials);
 
-      var url = "";
-      loader.load(url, function (object) {
-        // 모델 로드가 완료되었을때 호출되는 함수
+      loader.load(modelUrl, function (object) {수
         object.position.x = 0;
         object.position.y = 0;
         object.position.z = 0;
