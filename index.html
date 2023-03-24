@@ -80,7 +80,7 @@
     const scene2 = new THREE.Scene();
     const canvas2 = document.getElementById('c2');
     const renderer2 = new THREE.WebGLRenderer({ canvas: canvas2, alpha: true });
-    renderer2.setSize(200, 200);
+    renderer2.setSize(160, 160);
     const camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     const axes2 = new THREE.AxisHelper(150);
     // camera2.up = camera.up;
@@ -334,16 +334,17 @@
     }
     #c2 {
       position: absolute;
-      left: 3vw;
-      bottom: 3vw;
-      width: 200px;
-      height: 200px;
+      left: 4vw;
+      bottom: 4vw;
+      width: 160px;
+      height: 160px;
       display: block;
       float: left;
       background: radial-gradient(#ffffff, #000000);
       border: solid 1px #333333;
       border-radius: 50%;
       z-index: 100;
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     }
   </style>
 </html>
