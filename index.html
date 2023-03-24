@@ -15,12 +15,9 @@
 <script type="module">
     import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
     import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
-    import { OBJLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/OBJLoader.js';
-    import { MTLLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/MTLLoader.js';
-    import { STLLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/STLLoader.js';
     import { OrbitControls } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js';
     import { GUI } from 'https://cdn.skypack.dev/lil-gui';
-
+    
     // 센서 데이터 가져오기
     const sensorData = getSensorData()
 
@@ -168,7 +165,7 @@
 
     function loadGltfDeckModel() {
       const loader = new GLTFLoader();
-      const modelUrl = 'https://daeny96.github.io/dnk_git/GLTF/dpmsModel_deck.gltf'
+      const modelUrl = 'https://daeny96.github.io/dpms/model_GLTF/dpmsModel_deck.gltf'
 
       loader.load(modelUrl, function (gltf) {
         var object = gltf.scene;
@@ -190,7 +187,7 @@
 
     function loadGltfEquiModel() {
       const loader = new GLTFLoader();
-      const modelUrl = 'https://daeny96.github.io/dnk_git/GLTF/dpmsModel_equi.gltf'
+      const modelUrl = 'https://daeny96.github.io/dpms/model_GLTF/dpmsModel_equi.gltf'
 
       loader.load(modelUrl, function (gltf) {
         var object = gltf.scene;
@@ -213,7 +210,7 @@
 
     function loadGltfPipeModel() {
       const loader = new GLTFLoader();
-      const modelUrl = 'https://daeny96.github.io/dnk_git/GLTF/dpmsModel_pipe.gltf'
+      const modelUrl = 'https://daeny96.github.io/dpms/model_GLTF/dpmsModel_pipe.gltf'
 
       loader.load(modelUrl, function (gltf) {
         var object = gltf.scene;
@@ -277,9 +274,13 @@
   </script>
 
   <script type="module">
+    // import { OBJLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/OBJLoader.js';
+    // import { MTLLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/MTLLoader.js';
+    // import { STLLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/STLLoader.js';
+
     // function loadSTLModel() {
     //   const loader = new STLLoader()
-    //   const modelUrl = 'https://daeny96.github.io/dnk_git/wall.stl'
+    //   const modelUrl = 'https://daeny96.github.io/dpms/model_STL/wall.stl'
     //   loader.load(modelUrl, function (geometry) {
     //           const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
     //           const mesh = new THREE.Mesh(geometry, material)
@@ -296,7 +297,7 @@
 
     // function loadMTLLoader() {
     //   const loader = new MTLLoader();
-    //   const modelUrl = 'https://daeny96.github.io/dpms2/model/dpmsModel.mtl'
+    //   const modelUrl = 'https://daeny96.github.io/dpms/model_OBJ/dpmsModel.mtl'
 
     //   loader.load(modelUrl, function (materials) {
     //     materials.preload();
@@ -309,7 +310,7 @@
 
     // function loadOBJLoader(materials) {
     //   const loader = new OBJLoader();
-    //   const modelUrl = 'https://daeny96.github.io/dpms2/model/dpmsModel.obj'
+    //   const modelUrl = 'https://daeny96.github.io/dpms/model_OBJ/dpmsModel.obj'
 
     //   loader.load(modelUrl, function (object) {
     //     scene.add(object);
