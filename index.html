@@ -65,8 +65,11 @@
     const color = 0xFFFFFF;
     const intensity = 1;
     const light = new THREE.DirectionalLight(color, intensity);
+    const light2 = new THREE.DirectionalLight(color, intensity);
     light.position.set(20, 0, 80);
+    light2.position.set(20, 0, -80);
     scene.add(light);
+    scene.add(light2);
 
     // GRID 추가
     const size = 50;
@@ -86,10 +89,10 @@
     // camera2.up = camera.up;
     scene2.add(axes2);
 
+    loadGltfDeckModel()
     loadGltfPipeModel()
     loadGltfEquiModel()
-    loadGltfDeckModel()
-
+    
     animate()
 
     function getSensorData() {
@@ -173,7 +176,7 @@
           if (!node.isMesh) return;
           node.material.wireframe = false;
           node.material.transparent = true;
-          node.material.opacity = 0.20;
+          node.material.opacity = 0.4;
 
           if (node.material.name != null && node.material.name == "") {
             node.material.color.set("#f0f0f0")
