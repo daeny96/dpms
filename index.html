@@ -37,21 +37,6 @@
   controls.target.set(0, 0, 0);
   controls.update();
 
-  // 센서 박스 만들기
-  try {
-    if (sensorData.length == 1) { throw new Error("Has no sensor data.") }
-    sensorData.forEach((datum, index) => {
-      if (index != 0) {
-        const boxScale = 0.3
-        const color = 0xff0000
-        const sensor = makeSensorInstance(boxScale, color, datum.sensorPos.x, datum.sensorPos.y, datum.sensorPos.z)
-        scene.add(sensor)
-      }
-    })
-  } catch(e) { 
-    console.log(e);
-  }
-
   // 선택된 Sensor ID 가져오기
   let id = 0;
   const params = getUrlParams()
@@ -68,9 +53,30 @@
   controls.target.set(sensorData[id].sensorPos.x, sensorData[id].sensorPos.y, sensorData[id].sensorPos.z);
   controls.update();
 
+  // 센서 박스 만들기
+  try {
+    if (sensorData.length == 1) { throw new Error("Has no sensor data.") }
+    sensorData.forEach((datum, index) => {
+      if (index != 0) {
+        const boxScale = 0.4;
+        const pickColor = 0xff0000;
+        const baseColor = 0xffbfbf;
+        var sensor;
+        if (id == Number(datum.id)) {
+          sensor = makeSensorInstance(boxScale, pickColor, datum.sensorPos.x, datum.sensorPos.y, datum.sensorPos.z)          
+        } else {
+          sensor = makeSensorInstance(boxScale, baseColor, datum.sensorPos.x, datum.sensorPos.y, datum.sensorPos.z)
+        }
+        scene.add(sensor)
+      }
+    })
+  } catch(e) { 
+    console.log(e);
+  }
+  
   // 조명 추가
   const color = 0xFFFFFF;
-  const intensity = 1;
+  const intensity = 1; 
   const light = new THREE.DirectionalLight(color, intensity);
   const light2 = new THREE.DirectionalLight(color, intensity);
   light.position.set(20, 0, 80);
@@ -96,9 +102,9 @@
   // camera2.up = camera.up;
   scene2.add(axes2);
 
-  loadGltfDeckModel()
-  loadGltfPipeModel()
-  loadGltfEquiModel()
+  loadGltfModel('dpmsModel_deck', '#f0f0f0', 0.4, false)
+  loadGltfModel('dpmsModel_equi', '#6885ab', 0.7, false)
+  loadGltfModel('dpmsModel_pipe', '#edbe2f', 0.7, false)
    
   animate()
 
@@ -178,65 +184,21 @@
     return sensorData
   }
 
-  function loadGltfDeckModel() {
+  function loadGltfModel(fileName, color, alpha, isWireFrame) {
     const loader = new GLTFLoader();
-    const modelUrl = 'https://daeny96.github.io/dpms/model_GLTF/dpmsModel_deck.gltf'
+    const fName = fileName;
+    const modelUrl = 'https://daeny96.github.io/dpms/model_GLTF/' + fName + '.gltf';
 
     loader.load(modelUrl, function (gltf) {
       var object = gltf.scene;
       object.traverse((node) => {
         if (!node.isMesh) return;
-        node.material.wireframe = false;
+        node.material.wireframe = isWireFrame;
         node.material.transparent = true;
-        node.material.opacity = 0.4;
+        node.material.opacity = alpha;
 
         if (node.material.name != null && node.material.name == "") {
-          node.material.color.set("#f0f0f0")
-        }
-      });
-      scene.add(object);
-    }, undefined, function (error) {
-      console.error(error);
-    });
-  }
-
-  function loadGltfEquiModel() {
-    const loader = new GLTFLoader();
-    const modelUrl = 'https://daeny96.github.io/dpms/model_GLTF/dpmsModel_equi.gltf'
-
-    loader.load(modelUrl, function (gltf) {
-      var object = gltf.scene;
-
-      object.traverse((node) => {
-        if (!node.isMesh) return;
-        node.material.wireframe = false;
-        node.material.transparent = true;
-        node.material.opacity = 0.7;
-
-        if (node.material.name != null && node.material.name == "") {
-          node.material.color.set("#6885ab")
-        }
-      });
-      scene.add(object);
-    }, undefined, function (error) {
-      console.error(error);
-    });
-  }
-
-  function loadGltfPipeModel() {
-    const loader = new GLTFLoader();
-    const modelUrl = 'https://daeny96.github.io/dpms/model_GLTF/dpmsModel_pipe.gltf'
-
-    loader.load(modelUrl, function (gltf) {
-      var object = gltf.scene;
-      object.traverse((node) => {
-        if (!node.isMesh) return;
-        node.material.wireframe = false;
-        node.material.transparent = true;
-        node.material.opacity = 0.7;
-
-        if (node.material.name != null && node.material.name == "") {
-          node.material.color.set("#edbe2f")
+          node.material.color.set(color)
         }
       });
       scene.add(object);
