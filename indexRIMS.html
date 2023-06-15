@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="http://192.168.0.6/favicon2.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon2.png">
     <title>DKS DPMS 3D WEB VIEWER</title>
 </head>
 
@@ -15,8 +15,8 @@
 <script type="importmap">
   {
     "imports": {
-      "three": "http://192.168.0.6/node_modules/three/build/three.module.js",
-	    "three/addons/": "http://192.168.0.6/node_modules/three/examples/jsm/"
+      "three": "/node_modules/three/build/three.module.js",
+	    "three/addons/": "/node_modules/three/examples/jsm/"
     }
   }
 </script>
@@ -110,8 +110,6 @@
   // camera2.up = camera.up;
   scene2.add(axes2);
 
-  // loadGltfModel('dpmsModel_deck', '#f0f0f0', 0.4, false)
-  // loadGltfModel('dpmsModel_equi', '#6885ab', 0.7, false)
   loadGltfModel('dpmsModelForRIMS', '#edbe2f', 0.7, false)
 
   animate()
@@ -155,7 +153,7 @@
   function loadGltfModel(fileName, color, alpha, isWireFrame) {
     const loader = new GLTFLoader();
     const fName = fileName;
-    const modelUrl = 'http://192.168.0.6/' + fName + '.gltf';
+    const modelUrl = '/' + fName + '.gltf';
 
     loader.load(modelUrl, function (gltf) {
       var object = gltf.scene;
@@ -206,7 +204,7 @@
   function animate() {
     requestAnimationFrame(animate);
 
-    console.log(camera.position)
+    // console.log(camera.position)
 
     camera2.position.copy(camera.position);
     camera2.position.sub(controls.target); // added by @libe
