@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon2.png">
+    <link rel="shortcut icon" type="image/x-icon" href="https://daeny96.github.io/dpms/favicon2.png">
     <title>DKS DPMS 3D WEB VIEWER</title>
 </head>
 
@@ -15,8 +15,8 @@
 <script type="importmap">
   {
     "imports": {
-      "three": "/node_modules/three/build/three.module.js",
-	    "three/addons/": "/node_modules/three/examples/jsm/"
+      "three": "https://daeny96.github.io/dpms/node_modules/three/build/three.module.js",
+	    "three/addons/": "https://daeny96.github.io/dpms/node_modules/three/examples/jsm/"
     }
   }
 </script>
@@ -153,7 +153,7 @@
   function loadGltfModel(fileName, color, alpha, isWireFrame) {
     const loader = new GLTFLoader();
     const fName = fileName;
-    const modelUrl = '/' + fName + '.gltf';
+    const modelUrl = 'https://daeny96.github.io/dpms/' + fName + '.gltf';
 
     loader.load(modelUrl, function (gltf) {
       var object = gltf.scene;
