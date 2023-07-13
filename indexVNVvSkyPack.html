@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <link rel="shortcut icon" type="image/x-icon" href="http://192.168.0.6/favicon2.png">
+  <link rel="shortcut icon" type="image/x-icon" href="https://daeny96.github.io/dpms2/favicon2.png">
   <title>DKS DPMS 3D WEB VIEWER</title>
 </head>
 
@@ -12,20 +12,12 @@
   <canvas id="c2"></canvas>
 </body>
 
-<script type="importmap">
-{
-    "imports": {
-        "three": "http://192.168.0.6/node_modules/three/build/three.module.js",
-    "three/addons/": "http://192.168.0.6/node_modules/three/examples/jsm/"
-    }
-}
-</script>
-
 <script type="module">
-  import * as THREE from 'three';
-  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
- 
+  import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
+  import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
+  import { OrbitControls } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js';
+  import { GUI } from 'https://cdn.skypack.dev/lil-gui';
+  
   // 센서 데이터 가져오기
   const sensorData = getSensorData()
 
@@ -151,11 +143,11 @@
     ]
     return sensorData
   }
-  
+
   function loadGltfModel(fileName, color, alpha, isWireFrame) {
     const loader = new GLTFLoader();
     const fName = fileName;
-    const modelUrl = 'http://192.168.0.6/' + fName + '.gltf';
+    const modelUrl = 'https://daeny96.github.io/dpms/model_GLTF/' + fName + '.gltf';
 
     loader.load(modelUrl, function (gltf) {
       var object = gltf.scene;
@@ -206,7 +198,7 @@
   function animate() {
     requestAnimationFrame(animate);
 
-    // console.log(camera.position)
+    console.log(camera.position)
 
     camera2.position.copy(camera.position);
     camera2.position.sub(controls.target); // added by @libe
