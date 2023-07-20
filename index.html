@@ -58,7 +58,8 @@
     if (sensorData.length == 1) { throw new Error("Has no sensor data.") }
     sensorData.forEach((datum, index) => {
       if (index != 0) {
-        const boxScale = 0.02;
+        // const boxScale = 0.02;
+        const boxScale = 0.123;
         const pickColor = 0xff0000;
         const baseColor = 0xffbfbf;
         var sensor;
@@ -102,41 +103,42 @@
   // camera2.up = camera.up;
   scene2.add(axes2);
 
-  loadGltfModel('dpmsModelForRIMS', '#edbe2f', 0.7, false)
+  loadGltfModel('dpmsDeck', '#f0f0f0', 0.4, false)
+  loadGltfModel('dpmsPipe', '#edbe2f', 0.7, false)
 
   animate()
 
-  function getSensorData() {
+    function getSensorData() {
     const sensorData = [
       {
         id: 'default',
-        sensorPos: { x: -3.7, y: -3, z: 2.3 },
-        camPos: { x: -3.7, y: -5, z: 2.3 }
+        sensorPos: { x: 10, y: 17, z: 0 },
+        camPos: { x: 40, y: -30, z: 50 }
       },
       {
         id: '001',
-        sensorPos: { x: -3.263, y: -3.128, z: 2.561 },
-        camPos: { x: -3.263, y: -5.128, z: 2.561 },
+        sensorPos: { x: 11.74, y: 13.57, z: 19.26 },
+        camPos: { x: 15, y: 20, z: 25 }
       },
       {
         id: '002',
-        sensorPos: { x: -3.62, y: -3.128, z: 2.67 },
-        camPos: { x: -3.62, y: -5.128, z: 2.67 },
+        sensorPos: { x: 34.5, y: 11.45, z: 20 },
+        camPos: { x: 43, y: 17, z: 30 }
       },
       {
         id: '003',
-        sensorPos: { x: -3.667, y: -3.128, z: 2.311 },
-        camPos: { x: -3.667, y: -5.128, z: 2.311 },
+        sensorPos: { x: 19.6, y: -7.91, z: 21.5 },
+        camPos: { x: 9.7, y: 0.2, z: 36 }
       },
       {
         id: '004',
-        sensorPos: { x: -3.561, y: -3.128, z: 1.954 },
-        camPos: { x: -3.561, y: -5.128, z: 1.954 },
+        sensorPos: { x: 8.06, y: 2.56, z: 19.36 },
+        camPos: { x: 10, y: -3, z: 25 }
       },
       {
         id: '005',
-        sensorPos: { x: -3.915, y: -3.128, z: 1.910 },
-        camPos: { x: -3.915, y: -5.128, z: 1.910 },
+        sensorPos: { x: 21, y: -2.89, z: 21.59 },
+        camPos: { x: 23.88, y: -7.11, z: 24.97 }
       }
     ]
     return sensorData
